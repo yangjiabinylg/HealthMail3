@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID" version="2.5">
+
+    <display-name>Archetype Created Web Application</display-name>
+
+
+
+    <!-- CharacterEncodingFilter  配置过滤器 为了转码用的 -->
+    <filter>
+        <filter-name>characterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <!--  /*  拦截所有请求 走CharacterEncodingFilter
+             我们就不用再写转utf-8这种了
+           过滤所有的请求    -->
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+
+
+
+    <listener>
+        <!--     web容器启动和关闭的监听器   只是监听web容器的启动和关闭     -->
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
+
+
+
+
+
+    <listener>
+        <!--  ContextLoaderListener   web容器和spring容器进行整合进行监听     -->
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            <!--    指向spring配置文件    -->
+            classpath:applicationContext.xml
+            <!--   ContextLoaderListener 会 通过applicationContext.xml、
+                   将spring容器和web容器进行整合
+             -->
+        </param-value>
+    </context-param>
+
+
+
+
+
+
+
+    <servlet>
+        <!--DispatcherServlet    配置spring-mvc   -->
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        
+
+        <!--  指定SpringMVC的文件  不写是   默认dispatcher-servlet.xml名字   -->
+        <!--<init-param>-->
+            <!--<param-name>contextConfigLocation</param-name>-->
+            <!--<param-value>/WEB-INF/spring-mvc.xml</param-value>-->
+        <!--</init-param>-->
+        
+        
+        <!--   servlet的配置  当大于等于0 就在容器启动时初始化这个servlet
+        小于0或不指定 只有请求时才初始化servlet-->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+
+    <servlet-mapping>
+        <!-- DispatcherServlet  dispatcher 引用上面的springmvc配置 拦截所有的*.do   -->
+        <servlet-name>dispatcher</servlet-name>
+        <!--  springmvc 将所有的*.do进行拦截 -->
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+
+    <!--NFDFlightDataTaskListener 监听器-->
+    <!--<listener>-->
+        <!--<listener-class>com.zjyouth.utils.NFDFlightDataTaskListener</listener-class>-->
+    <!--</listener>-->
+
+</web-app>
+

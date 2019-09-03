@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/task
+     http://www.springframework.org/schema/task/spring-task-3.0.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--    spring容器的主配置   -->
+
+
+    <!--      扫描com.zjyouth下的一些注解 可以很方便的进行注入  -->
+    <context:component-scan base-package="com.zjyouth" annotation-config="true"/>
+
+    <!-- 定时 -->
+    <context:component-scan base-package="com.zjyouth.*" />
+    <task:executor id="executor" pool-size="5" />
+    <task:scheduler id="scheduler" pool-size="10" />
+    <task:annotation-driven executor="executor" scheduler="scheduler" />
+
+
+
+
+    <!--<context:annotation-config/>-->
+
+
+    <!--
+            在使用spectj注解实现springAOP：
+            1.需要使用@Aspect注解来标注切面
+            2.可以使用@before,@afterRuning,@around,@afterThrowning注解，来标注通知
+            3.必须有切入点point-cut,使用@pointcut(execution(""))注解来标注切入点
+            4.在aop.xml中，需要有
+            https://blog.csdn.net/qq_37761074/article/details/72859266
+            Spring配置- - -<aop:aspectj-autoproxy />
+            2017年11月01日 11:54:08 阅读数：488更多
+            个人分类： 日记
+            版权声明：本文为博主原创文章，未经博主允许不得转载。	https://blog.csdn.net/ke_zhang_123/article/details/78412536
+            <aop:aspectj-autoproxy proxy-target-class="true"/> 基于类的动态代理(依赖于CGlib库)
+            通过配置织入@Aspectj切面
+    -->
+    <!--  aop的配置   spring配置文分成多个文件   -->
+    <aop:aspectj-autoproxy/>
+
+
+    <!--   spring配置文件  dataSource分出来的子文件  -->
+    <import resource="applicationContext-datasource.xml"/>
+
+
+</beans>

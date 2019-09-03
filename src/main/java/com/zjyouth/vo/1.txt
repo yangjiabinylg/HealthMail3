@@ -1,0 +1,15 @@
+
+3层架构
+com.zjyouth.vo  -view object   value object
+bo  - bsiniss object（二期会使用）
+com.zjyouth.pojo  --数据库对象
+
+
+com.zjyouth.common-  用到常量公共类放到这个下面
+
+
+
+
+
+
+

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!--   打印日志  -->
+
+
+    <!--    打印日志到 擦他玲娜 文件中 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!--   编码是utf-8   -->
+        <encoding>UTF-8</encoding>
+        <encoder>
+            <!--     日志的格式     -->
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--   打印大于debug级别的都会显示  我们可以看到SQL语句的  -->
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <!--   项目的日志  RollingFileAppender  自动rolling   打印所有的日志   -->
+    <appender name="mmall" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>e:/mmalllog/mmall.log</File>
+        <!--<File>/developer/apache-tomcat-7.0.73/logs/mmall.log</File>-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--<fileNamePattern>/developer/apache-tomcat-7.0.73/logs/mmall.log.%d{yyyy-MM-dd}.gz</fileNamePattern>-->
+            <!--  日志按天进行分文件  -->
+            <fileNamePattern>e:/mmalllog/mmall.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <append>true</append>
+            <!--  最大存储10天的日志  -->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 同上   只不过多个filter    错误日志  -->
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>e:/mmalllog/error.log</File>
+        <!--<File>/developer/apache-tomcat-7.0.73/logs/error.log</File>-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--<fileNamePattern>/devsoft/apache-tomcat-7.0.73/logs/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>-->
+            <!--  日志按天进行分文件  -->
+            <fileNamePattern>e:/mmalllog/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <append>true</append>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+        <!--   只是多了一个filter而已     -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--  只打一错误的  其他的不打印  -->
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--  打印日志 -->
+    <logger name="com.mmall" additivity="false" level="INFO" >
+        <appender-ref ref="mmall" />
+        <appender-ref ref="console"/>
+    </logger>
+
+
+
+    <!-- geelynote mybatis log 日志 -->
+    <!--   dao层的答应出来   可以看到mysql的语句   -->
+    <logger name="com.zjyouth.dao" level="DEBUG"/>
+
+    <!--<logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG" >-->
+        <!--<appender-ref ref="console"/>-->
+    <!--</logger>-->
+
+    <!--<logger name="java.sql.Connection" level="DEBUG">-->
+        <!--<appender-ref ref="console"/>-->
+    <!--</logger>-->
+    <!--<logger name="java.sql.Statement" level="DEBUG">-->
+        <!--<appender-ref ref="console"/>-->
+    <!--</logger>-->
+
+    <!--<logger name="java.sql.PreparedStatement" level="DEBUG">-->
+        <!--<appender-ref ref="console"/>-->
+    <!--</logger>-->
+
+
+    <!--  根节点 打印是debug级别的    -->
+    <root level="DEBUG">
+        <appender-ref ref="console"/>
+        <appender-ref ref="error"/>
+    </root>
+
+</configuration>

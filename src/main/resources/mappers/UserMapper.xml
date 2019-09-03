@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zjyouth.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.zjyouth.pojo.User" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="question" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="answer" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, username, password, email, phone, question, answer, role, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mmall_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mmall_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zjyouth.pojo.User" >
+    insert into mmall_user (id, username, password, 
+      email, phone, question, 
+      answer, role, create_time, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{question,jdbcType=VARCHAR}, 
+      #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, now(),
+      now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.zjyouth.pojo.User" >
+    insert into mmall_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="question != null" >
+        question,
+      </if>
+      <if test="answer != null" >
+        answer,
+      </if>
+      <if test="role != null" >
+        role,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null" >
+        #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null" >
+        #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zjyouth.pojo.User" >
+    update mmall_user
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null" >
+        question = #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null" >
+        answer = #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        role = #{role,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = now(),
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zjyouth.pojo.User" >
+    update mmall_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      question = #{question,jdbcType=VARCHAR},
+      answer = #{answer,jdbcType=VARCHAR},
+      role = #{role,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--
+        int checkUsername(String username);//检查用户名是否存在
+        这里用户#{username} 的#可以防止sql注入
+  -->
+   <select id="checkUsername" resultType="int" parameterType="string">
+    select count(1) from mmall_user   <!-- count(1)统计第一列的行数   -->
+    where username = #{username}
+  </select>
+
+  <!--
+         int checkEmail(String email);//检查email是否存在
+   -->
+  <select id="checkEmail" resultType="int" parameterType="string">
+    select count(1) from mmall_user   <!-- count(1)统计第一列的行数   -->
+    where email = #{email}
+  </select>
+
+
+
+
+
+<!--    -->
+
+  <!--
+      //用户登录
+      User selectLogin(@Param("username") String username,@Param("password") String password);
+      resultMap="BaseResultMap"  返回user对象
+      parameterType="map"  传入参数多个使用map   好像是可以不写的
+      不是parameterMap="map"   parameterMap是和resultMap="BaseResultMap"一样在本文件中声明的对象
+      parameterType="map" 实际是parameterType="java.util.Map" mybatis自动识别而已
+
+
+      ParameterMap(不推荐) & parameterType
+       ParameterMap和resultMap类似，表示将查询结果集中列值的类型一一映射到java对象属性的类型上，在开发过程中不推荐这种方式。
+       一般使用parameterType直接将查询结果列值类型自动对应到java对象属性类型上，不再配置映射关系一一对应，
+       例如上述代码中下划线部分表示将查询结果类型自动对应到hdu.terence.bean.Message的Bean对象属性类型。
+  -->
+  <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
+    <!--
+          select * ??? 这样真的好吗？不好
+          这种 * 是非常非常不建议使用的  再次强调一下要什么查什么
+          数据库的表是可能变化的
+     -->
+
+     select
+      <include refid="Base_Column_List" />   <!--  经常用的提取出来   -->
+    from mmall_user
+    where username = #{username}
+    and password = #{password}
+
+  </select>
+
+
+  <!--String selectQuestionByUsername(String username);-->
+  <select id="selectQuestionByUsername" resultType="string" parameterType="string">
+      select
+      question
+      from mmall_user
+      where username = #{username}
+  </select>
+
+  <!--
+    //多个参数一定要写mybatis的注解 @Param("username")
+    //@Param("username") 要一一对应的
+    int checkAnswer(@Param("username")String username ,@Param("question")String question,@Param("answer")String answer);
+  -->
+  <!--
+          count(1) 只要查数量就好了 查对象就效率低很多了  大于0就说明answer是对的
+  -->
+   <select id="checkAnswer" resultType="int" parameterType="map">
+       select count(1)
+       from mmall_user
+       where username = #{username}
+       and question = #{question}
+       and answer = #{answer}
+   </select>
+
+  <!--
+        //根据用户名修改密码
+        int updatePasswordByUsername(@Param("username")String username
+                                      ,@Param("passwordNew")String passwordNew);
+  -->
+  <update id="updatePasswordByUsername" parameterType="map">
+      update mmall_user
+      SET password = #{passwordNew},update_time = now()
+      where username = #{username}
+  </update>
+<!--    -->
+
+  <!--
+      //防止横向越权，要校验一下这个用户的旧密码，一定要指定是这个用户,因为我们会查询一个count(1),
+      //如果不指定id，那么结构就是true  count>0;
+      int checkPassword (@Param(value = "password")String password,@Param("userId") Integer userId);
+
+      cout(1) 比count(*) 效率要高
+  -->
+  <select id="checkPassword" resultType="int" parameterType="map">
+      select
+      count(1)
+      from mmall_user
+      where password = #{password}
+      and id = #{userId}   <!--  and id = #{userId}  如果不加就有人用字典去测试大概率会测试出来   -->
+  </select>
+
+  <!--
+  int checkEmailByUserId (@Param(value = "email")String email,@Param("userId") Integer userId);
+
+  email也要进行一个校验，校验新的email是不是已经存在，并且存在的email如果相同的话，不能是我们当前的用户的
+  and id != #{userId} count(1)>0 这个是这个email已经被人注册
+  -->
+  <select id="checkEmailByUserId" resultType="int" parameterType="map">
+     select count(1)
+     from mmall_user
+     where email = #{email}
+     and id != #{userId}
+  </select>
+
+
+
+  <!--  limit 10 offset 1   这部分是mybatis自动加上的  分页插件  使用aop进行分页 -->
+  <!--
+       List<Product> selectList();
+  -->
+  <select id="selectList" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from mmall_user
+    order by id asc
+    <!--   limit 10 offset 1   这部分是mybatis自动加上的  分页插件  -->
+    <!--  order by id asc; 不能加 ;
+     mybatis的分页插件会自动加上 limit 10 offset 1 这部分是mybatis自动加上的
+     -->
+  </select>
+
+
+  <!--  统计用户数量  -->
+  <select id="getUserCount"  resultType="int"  >
+    SELECT
+       count(id)
+    from mmall_user
+    order by id asc
+  </select>
+
+   <!--  通过用户名查找 用户 -->
+  <select id="selectByUsername" resultMap="BaseResultMap" parameterType="string" >
+    select
+    <include refid="Base_Column_List" />
+    from mmall_user
+    where  username = #{username}
+  </select>
+
+
+
+</mapper>
