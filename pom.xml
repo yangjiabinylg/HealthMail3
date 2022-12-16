@@ -26,7 +26,7 @@
 
     <!--   定义变量后面直接引用就好了  -->
     <!--  org.springframework.version  这个是自定义的能看懂即可   下面这3个都是自定义的     -->
-    <org.springframework.version>4.0.0.RELEASE</org.springframework.version>
+    <org.springframework.version>5.2.20.RELEASE</org.springframework.version>
     <!--   mybatis的版本  -->
     <org.mybatis.version>3.4.1</org.mybatis.version>
     <!--  mybatis 和spring集成要用到的jar包   -->
